@@ -12,6 +12,7 @@ from rest_framework import status
 from typing import Any, Type, Tuple
 from abstracts.paginators import AbstractPageNumberPaginator
 from rest_framework.viewsets import ViewSet
+from typing import Union, Optional
 
 from abstracts.mixins import ValidationMixin, ResponseMixin
 from .serializers import (
@@ -187,7 +188,17 @@ class SCPEuclidViewSet(ScpSafeViewSet):
     )
     serializer_class = ScpEuclidSerializer
 
+    pagination_class: Type[AbstractPageNumberPaginator] = \
+        AbstractPageNumberPaginator
+
     def list(self, request: Request):
+        paginator: AbstractPageNumberPaginator = \
+            self.pagination_class()
+
+        objects: list[Any] = paginator.paginate_queryset(
+            self.queryset,
+            request
+        )
         serializer: ScpEuclidSerializer
         return super(SCPEuclidViewSet, self).list(
             request
@@ -230,7 +241,17 @@ class ScpKeterViewSet(ScpSafeViewSet):
     )
     serializer_class = ScpKeterSerializer
 
+    pagination_class: Type[AbstractPageNumberPaginator] = \
+        AbstractPageNumberPaginator
+
     def list(self, request: Request):
+        paginator: AbstractPageNumberPaginator = \
+            self.pagination_class()
+
+        objects: list[Any] = paginator.paginate_queryset(
+            self.queryset,
+            request
+        )
         serializer: ScpEuclidSerializer
         return super(ScpKeterViewSet, self).list(
             request
@@ -270,7 +291,17 @@ class ScpThaumielViewSet(ScpSafeViewSet):
 
     permission_classes = ScpBasePermissons,
 
+    pagination_class: Type[AbstractPageNumberPaginator] = \
+        AbstractPageNumberPaginator
+
     def list(self, request: Request):
+        paginator: AbstractPageNumberPaginator = \
+            self.pagination_class()
+
+        objects: list[Any] = paginator.paginate_queryset(
+            self.queryset,
+            request
+        )
         serializer: ScpThaumielSerializer
         return super(ScpThaumielViewSet, self).list(
             request
