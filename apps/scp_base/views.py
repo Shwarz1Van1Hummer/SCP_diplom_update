@@ -8,8 +8,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework import status
-from typing import Optional
 
+from typing import Any, Type, Tuple
+from abstracts.paginators import AbstractPageNumberPaginator
 from rest_framework.viewsets import ViewSet
 
 from abstracts.mixins import ValidationMixin, ResponseMixin
@@ -40,14 +41,25 @@ class ScpSafeViewSet(ValidationMixin, ResponseMixin, ViewSet):
     )
     serializer_class = ScpSafeSerializer
 
+    pagination_class: Type[AbstractPageNumberPaginator] = \
+        AbstractPageNumberPaginator
+
     def list(self, request: Request):
+        paginator: AbstractPageNumberPaginator = \
+            self.pagination_class()
+
+        objects: list[Any] = paginator.paginate_queryset(
+            self.queryset,
+            request
+        )
         serializer: ScpSafeSerializer = \
             ScpSafeSerializer(
-                self.queryset,
+                objects,
                 many=True
             )
         return self.get_json_response(
-            serializer.data
+            serializer.data,
+            paginator
         )
 
     def create(self, request: Request):

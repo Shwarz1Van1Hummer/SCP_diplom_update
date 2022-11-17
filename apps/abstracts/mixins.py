@@ -2,8 +2,11 @@ from typing import Any
 
 from rest_framework.response import Response
 from django.db.models import QuerySet
+from typing import Union, Optional
+
 
 from abstracts.validations import APIValidator
+from abstracts.paginators import AbstractPageNumberPaginator, AbstractLimitOffsetPaginator
 
 
 class ResponseMixin:
@@ -12,9 +15,18 @@ class ResponseMixin:
     def get_json_response(
         self,
         data: dict[Any, Any],
-
+        paginator: Optional[
+            Union[
+                AbstractPageNumberPaginator,
+                AbstractLimitOffsetPaginator
+            ]
+        ] = None
     ) -> Response:
 
+        if paginator:
+            return paginator.get_paginated_response(
+                data
+            )
         return Response(
             {
                 'results': data
