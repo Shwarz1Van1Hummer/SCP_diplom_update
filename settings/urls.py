@@ -49,7 +49,7 @@ router: DefaultRouter = DefaultRouter(
     trailing_slash=False
 )
 router.register(
-    'users', RegistrationAPIView
+    'users_register', RegistrationAPIView
 )
 router.register(
     'scp_safe', ScpSafeViewSet

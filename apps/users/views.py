@@ -14,9 +14,6 @@ from abstracts.paginators import AbstractPageNumberPaginator
 class RegistrationAPIView(ValidationMixin, ResponseMixin, ViewSet):
     queryset: QuerySet = CustomUser.objects.all()
 
-    permission_classes = (
-        UserPermissions,
-    )
     serializer_class = RegistrationSerializer
 
     pagination_class: Type[AbstractPageNumberPaginator] = \

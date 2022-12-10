@@ -29,6 +29,12 @@ class TransactionsSerializer(ModelSerializer):
     status = CharField(required=False)
     amount = CharField(required=False)
 
+    def __init__(self, *args, **kwargs):
+        super(TransactionsSerializer, self).__init__(*args, **kwargs)
+        if 'request' in self.context:
+            self.fields['account'].queryset = self.fields['account'] \
+                .queryset.filter(user=self.context['view'].request.user)
+
     class Meta:
         model = Transactions
         fields = (
