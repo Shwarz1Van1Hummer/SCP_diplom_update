@@ -44,6 +44,7 @@ PROJECT_APPS = [
     'users.apps.UsersConfig',
     'scp_base.apps.ScpBaseConfig',
     'bank.apps.BankConfig',
+    'news.apps.NewsConfig',
 ]
 
 INSTALLED_APPS = DGANGO_AND_THIRD_PARTY_APPS + PROJECT_APPS

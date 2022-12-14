@@ -33,6 +33,8 @@ from scp_base.views import (
     ScpKeterViewSet,
     ScpThaumielViewSet
 )
+from news.views import NewsViewSet
+
 urlpatterns = [
     path(settings.ADMIN_SITE_URL, admin.site.urls),
     path('view/', TemV.as_view()),
@@ -50,6 +52,9 @@ router: DefaultRouter = DefaultRouter(
 )
 router.register(
     'users_register', RegistrationAPIView
+)
+router.register(
+    'news_foundation', NewsViewSet
 )
 router.register(
     'scp_safe', ScpSafeViewSet
