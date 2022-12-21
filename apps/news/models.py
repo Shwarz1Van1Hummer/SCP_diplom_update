@@ -7,7 +7,7 @@ class News(models.Model):
     date = models.DateTimeField("Время создания", auto_now_add=True)
 
     def __str__(self):
-        return f'Название новости: {self.title_new}'
+        return f'{self.description}'
 
     class Meta:
         verbose_name = 'Новость'

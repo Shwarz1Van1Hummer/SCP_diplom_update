@@ -14,7 +14,7 @@ class NewsViewSet(ValidationMixin, ResponseMixin, ViewSet):
     queryset: QuerySet = News.objects.all()
 
     permission_classes = (
-        AllowAny
+        AllowAny,
     )
 
     serializer_class = SerializerNews
