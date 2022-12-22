@@ -4,8 +4,8 @@ from urllib.request import Request
 from rest_framework.viewsets import ViewSet
 
 from abstracts.mixins import ValidationMixin, ResponseMixin
-from .serializers import RegistrationSerializer
-from .models import CustomUser
+from .serializers import RegistrationSerializer, UserNewsSerializer
+from .models import CustomUser, NewsUsers
 from abstracts.permissions import UserPermissions
 from typing import Any, Type, Tuple
 from abstracts.paginators import AbstractPageNumberPaginator
@@ -58,3 +58,27 @@ class RegistrationAPIView(ValidationMixin, ResponseMixin, ViewSet):
         )
 
 
+class NewsUsersApiView(ValidationMixin, ResponseMixin, ViewSet):
+    queryset: QuerySet = NewsUsers.objects.all()
+
+    serializer_class = UserNewsSerializer
+
+    pagination_class: Type[AbstractPageNumberPaginator] = \
+        AbstractPageNumberPaginator
+
+    def list(self, request: Request):
+        paginator: AbstractPageNumberPaginator = \
+            self.pagination_class()
+
+        objects: list[Any] = paginator.paginate_queryset(
+            self.queryset,
+            request
+        )
+        serializer: UserNewsSerializer = UserNewsSerializer(
+            objects,
+            many=True
+        )
+        return self.get_json_response(
+            serializer.data,
+            paginator
+        )

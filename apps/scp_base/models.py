@@ -4,6 +4,7 @@ from django.db.models.query import QuerySet
 from typing import Optional, Any
 from datetime import datetime
 from abstracts.models import AbstractDateTime
+from django.db.models.signals import pre_save, post_save, post_delete
 
 
 class ScpModelQuerySet(QuerySet):
@@ -163,3 +164,20 @@ class SCPAllClasses(AbstractDateTime,models.Model):
 
     def __str__(self):
         return f'{self.id}'
+
+
+class NewsSCP(models.Model):
+    message_scp = models.SlugField(blank=True, null=True)
+
+
+def safe_post_save(sender, instance, created, *args, **kwargs):
+    if created:
+        news_scp = NewsSCP.objects.create(
+            message=f"Добавление объекта SCP {instance.title_object} "
+                    "Подробную информацию вы можете изучить в списке классов объектов ФОНДА"
+        )
+        news_scp.save()
+
+
+post_save.connect(safe_post_save, sender=SCPSafe)
+

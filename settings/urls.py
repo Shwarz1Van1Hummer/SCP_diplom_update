@@ -25,7 +25,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView
 )
-from users.views import RegistrationAPIView
+from users.views import RegistrationAPIView, NewsUsersApiView
 from scp_base.views import (
     ScpSafeViewSet,
     SCPEuclidViewSet,
@@ -52,6 +52,9 @@ router: DefaultRouter = DefaultRouter(
 )
 router.register(
     'users_register', RegistrationAPIView
+)
+router.register(
+    'news_users', NewsUsersApiView
 )
 router.register(
     'news_foundation', NewsViewSet

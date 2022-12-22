@@ -9,9 +9,8 @@ from django.contrib.auth.models import (
 from django.contrib.auth.base_user import BaseUserManager
 from django.core.exceptions import ValidationError
 import datetime
-from datetime import timedelta
-import jwt
-from django.conf import settings
+from django.db.models.signals import pre_save, post_save, post_delete
+from django.utils.text import slugify
 
 
 class CustomUserManager(BaseUserManager):
@@ -68,3 +67,20 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         )
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+
+
+class NewsUsers(models.Model):
+    message = models.SlugField(blank=True, null=True)
+
+
+def user_post_save(sender, instance, created, *args, **kwargs):
+    if created:
+        news_users = NewsUsers.objects.create(
+            message="Внимание! "
+                    " Поприветствуйте нового сотрудника SCP фонда"
+                    f" Звание: Младший рабочий класс фонда {instance.email}"
+        )
+        news_users.save()
+
+
+post_save.connect(user_post_save, sender=CustomUser)

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from users.models import CustomUser
+from users.models import CustomUser, NewsUsers
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -19,3 +19,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return CustomUser.objects.create_user(**validated_data)
+
+
+class UserNewsSerializer(serializers.ModelSerializer):
+    message = serializers.SlugField(required=False)
+
+    class Meta:
+        model = NewsUsers
+        fields = (
+            '__all__'
+        )
