@@ -39,3 +39,14 @@ class NewsViewSet(ValidationMixin, ResponseMixin, ViewSet):
             serializer.data,
             paginator
         )
+
+    def create(self, request: Request):
+        serializer = SerializerNews(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return self.get_json_response(
+            {
+                'message': 'Объект был добавлен',
+                'payload': request.data
+            }
+        )
