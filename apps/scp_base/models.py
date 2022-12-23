@@ -184,6 +184,8 @@ def safe_post_save(sender, instance, created, *args, **kwargs):
 
 post_save.connect(safe_post_save, sender=SCPSafe)
 post_save.connect(safe_post_save, sender=SCPEuclid)
+post_save.connect(safe_post_save, sender=SCPKeter)
+post_save.connect(safe_post_save, sender=SCPThaumiel)
 
 
 def safe_post_delete(sender, instance, deleted, *args, **kwargs):
@@ -196,3 +198,4 @@ def safe_post_delete(sender, instance, deleted, *args, **kwargs):
         news_scp.save()
 
 
+post_delete.connect(safe_post_save, sender=SCPSafe)
