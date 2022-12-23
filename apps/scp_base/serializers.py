@@ -8,7 +8,8 @@ from .models import (
     SCPEuclid,
     SCPKeter,
     SCPThaumiel,
-    SCPAllClasses
+    SCPAllClasses,
+    NewsSCP
 )
 
 
@@ -75,6 +76,16 @@ class ScpAllSerializer(ModelSerializer):
 
     class Meta:
         model = SCPAllClasses
+        fields = (
+            '__all__'
+        )
+
+
+class NewsSCPSerializer(ModelSerializer):
+    message = CharField(required=False)
+
+    class Meta:
+        model = NewsSCP
         fields = (
             '__all__'
         )

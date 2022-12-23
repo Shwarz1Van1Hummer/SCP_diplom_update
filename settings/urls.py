@@ -31,9 +31,9 @@ from scp_base.views import (
     SCPEuclidViewSet,
     TemV,
     ScpKeterViewSet,
-    ScpThaumielViewSet
+    ScpThaumielViewSet,
+    NewsSCPApiView
 )
-from news.views import NewsViewSet
 
 urlpatterns = [
     path(settings.ADMIN_SITE_URL, admin.site.urls),
@@ -57,10 +57,13 @@ router.register(
     'news_users', NewsUsersApiView
 )
 router.register(
-    'news_foundation', NewsViewSet
+    'news_foundation', NewsUsersApiView
 )
 router.register(
     'scp_safe', ScpSafeViewSet
+)
+router.register(
+    'news_scp_object', NewsSCPApiView
 )
 router.register(
     'scp_euclid', SCPEuclidViewSet

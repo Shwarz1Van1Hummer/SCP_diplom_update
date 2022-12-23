@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 class AbstractPageNumberPaginator(PageNumberPagination):
 
-    page_size: int = 2
+    page_size: int = 5
     page_size_query_param: str = 'page_size'
     page_query_param: str = 'page'
     max_page_size: int = 10
@@ -30,7 +30,7 @@ class AbstractLimitOffsetPaginator(LimitOffsetPagination):
     """AbstractLimitOffsetPaginator."""
 
     offset: int = 0
-    limit: int = 2
+    limit: int = 5
 
     def get_paginated_response(self, data: list[Any]) -> Response:
         """Overriden method."""

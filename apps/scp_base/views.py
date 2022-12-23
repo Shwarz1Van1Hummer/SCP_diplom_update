@@ -20,14 +20,16 @@ from .serializers import (
     ScpEuclidSerializer,
     ScpKeterSerializer,
     ScpThaumielSerializer,
-    ScpAllSerializer
+    ScpAllSerializer,
+    NewsSCPSerializer
 )
 from .models import (
     SCPSafe,
     SCPEuclid,
     SCPKeter,
     SCPThaumiel,
-    SCPAllClasses
+    SCPAllClasses,
+    NewsSCP
 )
 from abstracts.permissions import ScpBasePermissons
 
@@ -332,6 +334,32 @@ class ScpThaumielViewSet(ScpSafeViewSet):
     def destroy(self, request: Request, pk: str) -> Response:
         return super(ScpThaumielViewSet, self).destroy(
             request, pk
+        )
+
+
+class NewsSCPApiView(ValidationMixin, ResponseMixin, ViewSet):
+    queryset: QuerySet = NewsSCP.objects.all()
+
+    serializer_class = NewsSCPSerializer
+
+    pagination_class: Type[AbstractPageNumberPaginator] = \
+        AbstractPageNumberPaginator
+
+    def list(self, request: Request):
+        paginator: AbstractPageNumberPaginator = \
+            self.pagination_class()
+
+        objects: list[Any] = paginator.paginate_queryset(
+            self.queryset,
+            request
+        )
+        serializer: NewsSCPSerializer = NewsSCPSerializer(
+            objects,
+            many=True
+        )
+        return self.get_json_response(
+            serializer.data,
+            paginator
         )
 
 

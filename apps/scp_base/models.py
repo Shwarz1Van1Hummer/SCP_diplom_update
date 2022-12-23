@@ -169,15 +169,30 @@ class SCPAllClasses(AbstractDateTime,models.Model):
 class NewsSCP(models.Model):
     message_scp = models.SlugField(blank=True, null=True)
 
+    def __str__(self):
+        return f'{self.message_scp}'
+
 
 def safe_post_save(sender, instance, created, *args, **kwargs):
     if created:
         news_scp = NewsSCP.objects.create(
-            message=f"Добавление объекта SCP {instance.title_object} "
+            message_scp=f"Добавление объекта SCP {instance.title_object}. "              
                     "Подробную информацию вы можете изучить в списке классов объектов ФОНДА"
         )
         news_scp.save()
 
 
 post_save.connect(safe_post_save, sender=SCPSafe)
+post_save.connect(safe_post_save, sender=SCPEuclid)
+
+
+def safe_post_delete(sender, instance, deleted, *args, **kwargs):
+    if deleted:
+        news_scp = NewsSCP.objects.create(
+            message_scp=f"Удаления объекта SCP {instance.title_object}. "
+                          f"Данные объекта были удалены связи с решением совета О5."
+
+        )
+        news_scp.save()
+
 
