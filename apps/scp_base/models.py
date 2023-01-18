@@ -5,6 +5,7 @@ from typing import Optional, Any
 from datetime import datetime
 from abstracts.models import AbstractDateTime
 from django.db.models.signals import pre_save, post_save, post_delete
+from django.dispatch import receiver
 
 
 class ScpModelQuerySet(QuerySet):
@@ -86,7 +87,7 @@ class SCPEuclid(AbstractDateTime, models.Model):
         return f'{self.title_object}'
 
 
-class SCPKeter(AbstractDateTime,models.Model):
+class SCPKeter(AbstractDateTime, models.Model):
     title_object = models.CharField(verbose_name='Название объекта фонда', max_length=255)
     description = models.CharField(verbose_name='Описание', max_length=6000)
     image = models.ImageField(verbose_name="Изображение", upload_to='scp_keter')
@@ -188,14 +189,15 @@ post_save.connect(safe_post_save, sender=SCPKeter)
 post_save.connect(safe_post_save, sender=SCPThaumiel)
 
 
-def safe_post_delete(sender, instance, deleted, *args, **kwargs):
-    if deleted:
-        news_scp = NewsSCP.objects.create(
-            message_scp=f"Удаления объекта SCP {instance.title_object}. "
+@receiver(post_delete, sender=SCPSafe)
+def safe_post_delete(sender, instance, *args, **kwargs):
+    news_scp = NewsSCP.objects.create(
+            message_scp=f"Удаление объекта SCP {instance.title_object}. "
                           f"Данные объекта были удалены связи с решением совета О5."
 
         )
-        news_scp.save()
+    print('ddd')
+    news_scp.save()
 
 
-post_delete.connect(safe_post_save, sender=SCPSafe)
+post_delete.connect(safe_post_delete, sender=SCPSafe)

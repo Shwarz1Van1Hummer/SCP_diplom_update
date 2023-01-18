@@ -96,3 +96,5 @@ urlpatterns += [
     ),
 
 ]
+# "email": "Tosya@mail.com",
+# "password": "11111111"
